@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: msclients
+
+# Deixar porta 0 para subir em uma porta randomica
+server:
+  port: 0
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
