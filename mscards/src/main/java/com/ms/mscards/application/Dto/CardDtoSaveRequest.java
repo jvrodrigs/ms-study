@@ -1,19 +1,19 @@
 package com.ms.mscards.application.Dto;
 
 import com.ms.mscards.model.CardBrand;
-import com.ms.mscards.model.Card;
+import com.ms.mscards.model.Cartao;
 import lombok.Data;
 
 import java.math.BigDecimal;
 
 @Data
 public class CardDtoSaveRequest {
-    private String name;
-    private CardBrand brand;
-    private BigDecimal income;
-    private BigDecimal limit;
+    private String nome;
+    private CardBrand bandeira;
+    private BigDecimal renda;
+    private BigDecimal limite;
 
-    public Card toModel(){
-        return new Card(name, brand, income, limit);
+    public Cartao toModel(){
+        return new Cartao(nome, bandeira, renda, limite);
     }
 }

@@ -2,7 +2,8 @@ package com.ms.mscards.application;
 
 import com.ms.mscards.application.Dto.CardDtoSaveRequest;
 import com.ms.mscards.application.Dto.CardsByClientResponse;
-import com.ms.mscards.model.Card;
+import com.ms.mscards.model.Cartao;
+import com.ms.mscards.model.ClienteCartao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,8 +20,7 @@ import java.util.stream.Collectors;
 public class CardsController {
 
     private final CardsService service;
-//    private final ClientCardService clientCardService;
-
+    private final ClienteCartaoService clienteCartaoService;
     @GetMapping
     public String status(){
         log.info("Verify code status microservice cards!");
@@ -34,17 +34,17 @@ public class CardsController {
         return ResponseEntity.status(HttpStatus.CREATED).body(bodyCard);
     }
 
-    @GetMapping(params = "income")
-    public ResponseEntity<List<Card>> getCardsIncomeLess(@RequestParam("income") Long income){
-        List<Card> listResponse = service.getCardsIncomeLowerEqual(income);
+    @GetMapping(params = "renda")
+    public ResponseEntity<List<Cartao>> getCardsIncomeLess(@RequestParam("renda") Long income){
+        List<Cartao> listResponse = service.getCardsIncomeLowerEqual(income);
         return ResponseEntity.ok(listResponse);
     }
 
-//    @GetMapping(params = "cpf")
-//    public ResponseEntity<List<CardsByClientResponse>> getCardsByClient (@RequestParam("cpf") String cpf){
-//        List<ClientCard> listResponse = clientCardService.listCardsByCpf(cpf);
-//        List<CardsByClientResponse> resultList = listResponse.stream().map(CardsByClientResponse::fromModel)
-//                .collect(Collectors.toList());
-//        return ResponseEntity.ok(resultList);
-//    }
+    @GetMapping(params = "cpf")
+    public ResponseEntity<List<CardsByClientResponse>> getCardsByClient (@RequestParam("cpf") String cpf){
+        List<ClienteCartao> listResponse = clienteCartaoService.listCardsByCpfClient(cpf);
+        List<CardsByClientResponse> resultList = listResponse.stream().map(CardsByClientResponse::fromModel)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(resultList);
+    }
 }

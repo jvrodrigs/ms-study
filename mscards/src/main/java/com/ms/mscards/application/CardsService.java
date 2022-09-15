@@ -1,6 +1,6 @@
 package com.ms.mscards.application;
 
-import com.ms.mscards.model.Card;
+import com.ms.mscards.model.Cartao;
 import com.ms.mscards.repository.CardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,12 +16,12 @@ public class CardsService {
     private final CardRepository cardRepository;
 
     @Transactional
-    public Card save(Card cards){
+    public Cartao save(Cartao cards){
         return cardRepository.save(cards);
     }
 
-    public List<Card> getCardsIncomeLowerEqual(Long income){
+    public List<Cartao> getCardsIncomeLowerEqual(Long income){
         var incomeBigDecimal = BigDecimal.valueOf(income);
-        return cardRepository.findByIncomeLessThanEqual(incomeBigDecimal);
+        return cardRepository.findByRendaLessThanEqual(incomeBigDecimal);
     }
 }

@@ -9,13 +9,15 @@ import java.math.BigDecimal;
 @Entity
 @NoArgsConstructor
 @Data
-public class CardClient {
+public class ClienteCartao {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String cpf;
 
     @ManyToOne
-    private Card card;
-    private BigDecimal limit;
+    @JoinColumn(name = "id_cartao")
+    private Cartao cartao;
+    private BigDecimal limite;
 }
