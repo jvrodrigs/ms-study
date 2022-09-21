@@ -1,9 +1,12 @@
 package com.ms.mscreditappraiser.application;
 
+import com.ms.mscreditappraiser.model.Dto.DataRequestIssueCard;
 import com.ms.mscreditappraiser.model.Dto.DateEvaluation;
+import com.ms.mscreditappraiser.model.Dto.ProtocolRequestCard;
 import com.ms.mscreditappraiser.model.Dto.ReturnEvaluationClient;
 import com.ms.mscreditappraiser.model.SituationClient;
 import com.ms.mscreditappraiser.utils.exception.ErrorInCommunicationMsException;
+import com.ms.mscreditappraiser.utils.exception.ErrorRequestQueueCardException;
 import com.ms.mscreditappraiser.utils.exception.StatusCodeNotFoundClientException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,6 +50,17 @@ public class CreditAppraiserController {
             return ResponseEntity.notFound().build();
         } catch (ErrorInCommunicationMsException e){
             return ResponseEntity.status(HttpStatus.resolve(e.getStatusCode())).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("request-card")
+    public ResponseEntity requestCard(@RequestBody DataRequestIssueCard data){
+        try {
+            ProtocolRequestCard protocolRequestCard = creditAppraiserService
+                    .requestCardIssuance(data);
+            return ResponseEntity.ok(protocolRequestCard);
+        }catch (ErrorRequestQueueCardException e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
 }

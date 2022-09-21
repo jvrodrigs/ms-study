@@ -4,7 +4,9 @@ import com.ms.mscreditappraiser.model.Dto.*;
 import com.ms.mscreditappraiser.model.SituationClient;
 import com.ms.mscreditappraiser.utils.CardsPerClientResource;
 import com.ms.mscreditappraiser.utils.ClientResourceClient;
+import com.ms.mscreditappraiser.utils.IssueCardPublisher;
 import com.ms.mscreditappraiser.utils.exception.ErrorInCommunicationMsException;
+import com.ms.mscreditappraiser.utils.exception.ErrorRequestQueueCardException;
 import com.ms.mscreditappraiser.utils.exception.StatusCodeNotFoundClientException;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,6 +25,7 @@ public class CreditAppraiserService {
 
     private final ClientResourceClient clientResource;
     private final CardsPerClientResource cardsPerClientResource;
+    private final IssueCardPublisher issueCardPublisher;
 
     public SituationClient getSituationClient(String cpf) throws StatusCodeNotFoundClientException, ErrorInCommunicationMsException {
         try{
@@ -73,6 +77,16 @@ public class CreditAppraiserService {
                 throw new StatusCodeNotFoundClientException();
             }
             throw new ErrorInCommunicationMsException(e.getMessage(), statusCode);
+        }
+    }
+
+    public ProtocolRequestCard requestCardIssuance(DataRequestIssueCard data){
+        try{
+            issueCardPublisher.requestIssuanceReceive(data);
+            var protocol = UUID.randomUUID().toString();
+            return new ProtocolRequestCard(protocol);
+        } catch (Exception e){
+            throw new ErrorRequestQueueCardException(e.getMessage());
         }
     }
 }
